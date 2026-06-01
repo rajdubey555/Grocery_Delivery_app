@@ -485,28 +485,6 @@ curl -H "Origin: https://your-app.netlify.app" https://quickcart-api.onrender.co
 
 ---
 
-## 📝 Viva Questions & Answers
-
-**Q1: What is the MERN stack?**
-A: MERN stands for MongoDB, Express.js, React.js, and Node.js. MongoDB is a NoSQL database, Express.js is a backend web framework, React.js is a frontend library, and Node.js is a JavaScript runtime.
-
-**Q2: How does JWT authentication work?**
-A: JWT (JSON Web Token) is a compact token format. When a user logs in, the server creates a signed token containing user information. This token is stored on the client and sent with every request via the Authorization header. The server verifies the token signature before processing protected requests.
-
-**Q3: What is bcryptjs used for?**
-A: bcryptjs is used to hash passwords before storing them in the database. It uses a salt (random data) combined with the password and applies multiple rounds of hashing, making it computationally difficult to reverse-engineer the original password.
-
-**Q4: What is React Context API?**
-A: React Context API provides a way to share state across components without passing props through every level of the component tree. This project uses two contexts: AuthContext (for user authentication state) and CartContext (for shopping cart state).
-
-**Q5: What is middleware in Express.js?**
-A: Middleware functions are functions that have access to the request (req), response (res), and the next middleware function. They can execute code, modify request/response objects, end the request-response cycle, or call the next middleware. Example: auth middleware verifies JWT tokens before allowing access to protected routes.
-
-**Q6: How does file upload work?**
-A: Multer is a Node.js middleware for handling `multipart/form-data`. In development, files save to disk (`uploads/`). In production, files upload to Cloudinary (cloud storage) since Render's disk is ephemeral. The product controller auto-detects which storage mode to use.
-
----
-
 ## 📄 License
 
 This project is created for educational/college practical purposes.
@@ -528,4 +506,4 @@ This project is created for educational/college practical purposes.
 
 ---
 
-**Made with ❤️ for MCA/BCA Practical Examination**
+**Made with ❤️ **
