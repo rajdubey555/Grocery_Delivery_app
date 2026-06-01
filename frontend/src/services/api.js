@@ -1,11 +1,23 @@
 import axios from 'axios';
 
-// In production (Netlify), use the full Render backend URL
-// In development, use relative /api path (proxied by Vite)
-const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// Determine base URL for API calls
+// In development: uses Vite proxy (/api → localhost:5000/api)
+// In production: uses the Render backend URL
+const getBaseURL = () => {
+    // If an env var is explicitly set, use it
+    if (import.meta.env.VITE_API_URL) {
+        return import.meta.env.VITE_API_URL;
+    }
+    // In production (Netlify), use the hardcoded Render URL
+    if (import.meta.env.PROD) {
+        return 'https://quickcart-api-1suo.onrender.com/api';
+    }
+    // In development, use the Vite proxy
+    return '/api';
+};
 
 const API = axios.create({
-    baseURL: BASE_URL,
+    baseURL: getBaseURL(),
 });
 
 // Attach token to every request
