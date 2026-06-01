@@ -12,23 +12,29 @@ connectDB();
 
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    process.env.FRONTEND_URL, // Your Netlify URL
-].filter(Boolean);
-
+// CORS — Allow frontend origin
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (mobile, curl, Postman)
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin (mobile, curl, Postman, server-to-server)
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            process.env.FRONTEND_URL,
+        ].filter(Boolean);
+
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'));
+            console.log('CORS blocked origin:', origin);
+            console.log('Allowed origins:', allowedOrigins);
+            callback(null, false); // Use false instead of Error — sends proper CORS rejection
         }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
