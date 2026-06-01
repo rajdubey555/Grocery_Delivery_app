@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiMail, FiLock, FiEye, FiEyeOff, FiShoppingCart } from 'react-icons/fi';
+import { FiMail, FiLock, FiEye, FiEyeOff, FiShoppingCart, FiAlertCircle } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
@@ -8,28 +8,29 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         setSubmitting(true);
+        // Check if user is trying to login as admin from user portal
+        const stored = localStorage.getItem('quickcart_user');
+        if (stored) {
+            try {
+                const u = JSON.parse(stored);
+                if (u.role === 'admin') {
+                    setError('Please use the Admin Portal to login as an administrator.');
+                    setSubmitting(false);
+                    return;
+                }
+            } catch { /* ignore */ }
+        }
         const result = await login(email, password);
         setSubmitting(false);
         if (result.success) {
-            // Role-based redirect: admin goes to admin panel, users go to home
-            const stored = localStorage.getItem('quickcart_user');
-            if (stored) {
-                try {
-                    const user = JSON.parse(stored);
-                    if (user.role === 'admin') {
-                        navigate('/admin');
-                        return;
-                    }
-                } catch {
-                    // fall through to default
-                }
-            }
             navigate('/');
         }
     };

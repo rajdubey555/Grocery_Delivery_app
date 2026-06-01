@@ -47,10 +47,10 @@ const ProtectedRoute = ({ children }) => {
 
 // Admin Route wrapper (requires admin role)
 const AdminRoute = ({ children }) => {
-    const { user, loading, isAdmin } = useAuth();
+    const { adminUser, loading, isAdmin } = useAuth();
     if (loading) return <Loader fullScreen />;
-    if (!user) return <Navigate to="/admin/login" replace />;
-    if (!isAdmin) return <Navigate to="/" replace />;
+    if (!adminUser) return <Navigate to="/admin/login" replace />;
+    if (!isAdmin) return <Navigate to="/admin/login" replace />;
     return children;
 };
 

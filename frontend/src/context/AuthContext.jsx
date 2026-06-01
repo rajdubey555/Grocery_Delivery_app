@@ -4,29 +4,44 @@ import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
 
+// Separate localStorage keys for user and admin sessions
+const USER_KEY = 'quickcart_user';
+const ADMIN_KEY = 'quickcart_admin';
+
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);           // customer session
+    const [adminUser, setAdminUser] = useState(null); // admin session
     const [loading, setLoading] = useState(true);
 
-    // Load user from localStorage on mount
+    // Load both sessions from localStorage on mount
     useEffect(() => {
-        const stored = localStorage.getItem('quickcart_user');
-        if (stored) {
+        const storedUser = localStorage.getItem(USER_KEY);
+        const storedAdmin = localStorage.getItem(ADMIN_KEY);
+        if (storedUser) {
             try {
-                setUser(JSON.parse(stored));
+                setUser(JSON.parse(storedUser));
             } catch {
-                localStorage.removeItem('quickcart_user');
+                localStorage.removeItem(USER_KEY);
+            }
+        }
+        if (storedAdmin) {
+            try {
+                setAdminUser(JSON.parse(storedAdmin));
+            } catch {
+                localStorage.removeItem(ADMIN_KEY);
             }
         }
         setLoading(false);
     }, []);
 
-    // Register
+    // Register (always creates a customer account)
     const register = async (formData) => {
         try {
             const { data } = await API.post('/auth/register', formData);
-            localStorage.setItem('quickcart_user', JSON.stringify(data));
+            localStorage.setItem(USER_KEY, JSON.stringify(data));
+            localStorage.removeItem(ADMIN_KEY); // clear any admin session
             setUser(data);
+            setAdminUser(null);
             toast.success('Registration successful!');
             return { success: true };
         } catch (error) {
@@ -36,12 +51,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Login
+    // User Login (stores in quickcart_user, clears admin session)
     const login = async (email, password) => {
         try {
             const { data } = await API.post('/auth/login', { email, password });
-            localStorage.setItem('quickcart_user', JSON.stringify(data));
+            localStorage.setItem(USER_KEY, JSON.stringify(data));
+            localStorage.removeItem(ADMIN_KEY); // clear any admin session
             setUser(data);
+            setAdminUser(null);
             toast.success('Login successful!');
             return { success: true };
         } catch (error) {
@@ -51,11 +68,35 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Logout
+    // Admin Login (stores in quickcart_admin, clears user session)
+    const adminLogin = async (email, password) => {
+        try {
+            const { data } = await API.post('/auth/login', { email, password });
+            localStorage.setItem(ADMIN_KEY, JSON.stringify(data));
+            localStorage.removeItem(USER_KEY); // clear any user session
+            setAdminUser(data);
+            setUser(null);
+            toast.success('Admin login successful!');
+            return { success: true };
+        } catch (error) {
+            const msg = error.response?.data?.message || 'Login failed';
+            toast.error(msg);
+            return { success: false, message: msg };
+        }
+    };
+
+    // User Logout
     const logout = () => {
-        localStorage.removeItem('quickcart_user');
+        localStorage.removeItem(USER_KEY);
         setUser(null);
         toast.success('Logged out successfully');
+    };
+
+    // Admin Logout
+    const adminLogout = () => {
+        localStorage.removeItem(ADMIN_KEY);
+        setAdminUser(null);
+        toast.success('Admin logged out successfully');
     };
 
     // Update profile
@@ -63,7 +104,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await API.put('/auth/profile', profileData);
             const updated = { ...user, name: data.name, mobile: data.mobile };
-            localStorage.setItem('quickcart_user', JSON.stringify(updated));
+            localStorage.setItem(USER_KEY, JSON.stringify(updated));
             setUser(updated);
             toast.success('Profile updated!');
             return { success: true };
@@ -85,10 +126,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const isAdmin = user?.role === 'admin';
+    const isAdmin = adminUser?.role === 'admin';
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAdmin, login, register, logout, updateProfile, changePassword }}>
+        <AuthContext.Provider value={{
+            user, adminUser, loading, isAdmin,
+            login, adminLogin, logout, adminLogout,
+            register, updateProfile, changePassword,
+        }}>
             {children}
         </AuthContext.Provider>
     );

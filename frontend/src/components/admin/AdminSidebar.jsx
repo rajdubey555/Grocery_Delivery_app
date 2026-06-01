@@ -20,11 +20,11 @@ const AdminSidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { adminUser, adminLogout } = useAuth();
 
   const handleLogout = () => {
-    logout();
-    navigate('/login');
+    adminLogout();
+    navigate('/admin/login');
   };
 
   return (
@@ -68,11 +68,11 @@ const AdminSidebar = () => {
         {/* User Info */}
         <div className={`px-4 py-3 border-b border-gray-100 ${collapsed ? 'text-center' : ''}`}>
           <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold mx-auto">
-            {user?.name?.charAt(0)?.toUpperCase()}
+            {adminUser?.name?.charAt(0)?.toUpperCase()}
           </div>
           {!collapsed && (
             <div className="mt-2 text-center">
-              <p className="text-sm font-semibold text-gray-800">{user?.name}</p>
+              <p className="text-sm font-semibold text-gray-800">{adminUser?.name}</p>
               <p className="text-xs text-primary-600 bg-primary-50 rounded-full px-2 py-0.5 inline-block mt-1">Admin</p>
             </div>
           )}
@@ -88,8 +88,8 @@ const AdminSidebar = () => {
                 to={item.path}
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-colors ${isActive
-                    ? 'bg-primary-50 text-primary-600 font-semibold'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-primary-50 text-primary-600 font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   } ${collapsed ? 'justify-center' : ''}`}
                 title={collapsed ? item.label : ''}
               >

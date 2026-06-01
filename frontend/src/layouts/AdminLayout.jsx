@@ -5,14 +5,14 @@ import { useAuth } from '../context/AuthContext';
 import Loader from '../components/common/Loader';
 
 const AdminLayout = () => {
-    const { user, loading, isAdmin } = useAuth();
+    const { adminUser, loading, isAdmin } = useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     if (loading) {
         return <Loader fullScreen />;
     }
 
-    if (!user || !isAdmin) {
+    if (!adminUser || !isAdmin) {
         return <Navigate to="/admin/login" replace />;
     }
 

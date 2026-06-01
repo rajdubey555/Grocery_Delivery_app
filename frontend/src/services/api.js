@@ -31,8 +31,10 @@ const API = axios.create({
 // Attach token to every request
 API.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('quickcart_user') || 'null');
-    if (user?.token) {
-        config.headers.Authorization = `Bearer ${user.token}`;
+    const admin = JSON.parse(localStorage.getItem('quickcart_admin') || 'null');
+    const token = user?.token || admin?.token;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
 });
