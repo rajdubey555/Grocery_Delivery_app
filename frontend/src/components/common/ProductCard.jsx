@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiShoppingCart, FiStar, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../services/imageUrl';
 
 const ProductCard = ({ product }) => {
     const { addToCart } = useCart();
@@ -12,7 +13,7 @@ const ProductCard = ({ product }) => {
                 <div className="aspect-square bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center p-6">
                     {product.image ? (
                         <img
-                            src={`http://localhost:5000${product.image}`}
+                            src={getImageUrl(product.image)}
                             alt={product.name}
                             className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
                         />

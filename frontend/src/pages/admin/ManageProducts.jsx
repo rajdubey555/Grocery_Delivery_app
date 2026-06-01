@@ -3,6 +3,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiX, FiShoppingBag } from 'react-icons/fi';
 import API from '../../services/api';
 import Loader from '../../components/common/Loader';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../../services/imageUrl';
 
 const ManageProducts = () => {
     const [products, setProducts] = useState([]);
@@ -119,7 +120,7 @@ const ManageProducts = () => {
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                                                 {prod.image ? (
-                                                    <img src={`http://localhost:5000${prod.image}`} alt={prod.name} className="w-full h-full object-cover rounded-lg" />
+                                                    <img src={getImageUrl(prod.image)} alt={prod.name} className="w-full h-full object-cover rounded-lg" />
                                                 ) : <FiShoppingBag className="text-primary-400" />}
                                             </div>
                                             <div>

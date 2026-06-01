@@ -4,6 +4,7 @@ import { FiMinus, FiPlus, FiShoppingCart, FiStar, FiArrowLeft, FiShoppingBag, Fi
 import API from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import Loader from '../../components/common/Loader';
+import { getImageUrl } from '../../services/imageUrl';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -46,7 +47,7 @@ const ProductDetail = () => {
                     <div className="aspect-square bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl flex items-center justify-center p-8">
                         {product.image ? (
                             <img
-                                src={`http://localhost:5000${product.image}`}
+                                src={getImageUrl(product.image)}
                                 alt={product.name}
                                 className="w-full h-full object-contain"
                             />

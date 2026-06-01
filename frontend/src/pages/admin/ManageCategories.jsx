@@ -3,6 +3,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiX, FiFolder } from 'react-icons/fi';
 import API from '../../services/api';
 import Loader from '../../components/common/Loader';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../../services/imageUrl';
 
 const ManageCategories = () => {
     const [categories, setCategories] = useState([]);
@@ -99,7 +100,7 @@ const ManageCategories = () => {
                                     <td className="px-6 py-4">
                                         <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center text-2xl">
                                             {cat.image ? (
-                                                <img src={`http://localhost:5000${cat.image}`} alt={cat.name} className="w-full h-full object-cover rounded-xl" />
+                                                <img src={getImageUrl(cat.image)} alt={cat.name} className="w-full h-full object-cover rounded-xl" />
                                             ) : <FiFolder className="text-primary-400" />}
                                         </div>
                                     </td>

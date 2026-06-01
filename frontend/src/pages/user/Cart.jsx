@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FiTrash2, FiMinus, FiPlus, FiShoppingCart, FiArrowLeft, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../services/imageUrl';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, cartTotal, deliveryCharge, grandTotal, cartCount } = useCart();
@@ -36,7 +37,7 @@ const Cart = () => {
                         <div key={item.product} className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-4 hover-card">
                             <div className="w-20 h-20 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-xl flex items-center justify-center flex-shrink-0">
                                 {item.image ? (
-                                    <img src={`http://localhost:5000${item.image}`} alt={item.name} className="w-full h-full object-contain p-2" />
+                                    <img src={getImageUrl(item.image)} alt={item.name} className="w-full h-full object-contain p-2" />
                                 ) : (
                                     <FiShoppingBag className="text-3xl text-primary-300" />
                                 )}
