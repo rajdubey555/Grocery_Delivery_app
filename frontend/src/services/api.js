@@ -32,7 +32,9 @@ const API = axios.create({
 API.interceptors.request.use((config) => {
     const user = JSON.parse(localStorage.getItem('quickcart_user') || 'null');
     const admin = JSON.parse(localStorage.getItem('quickcart_admin') || 'null');
-    const token = user?.token || admin?.token;
+    // Admin token takes priority so that admin API calls
+    // (dashboard, product CRUD, etc.) always use the admin session
+    const token = admin?.token || user?.token;
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
