@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiUser, FiMenu, FiX, FiLogOut, FiPackage, FiSearch, FiSettings } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiMenu, FiX, FiLogOut, FiPackage, FiSearch } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const { user, logout, isAdmin } = useAuth();
+    const { user, logout } = useAuth();
     const { cartCount } = useCart();
     const navigate = useNavigate();
 
@@ -80,11 +80,6 @@ const Navbar = () => {
                                         <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600">
                                             My Orders
                                         </Link>
-                                        {isAdmin && (
-                                            <Link to="/admin" className="flex items-center gap-2 px-4 py-2 text-sm text-accent-500 hover:bg-accent-50 font-medium">
-                                                <FiSettings size={14} /> Admin Panel
-                                            </Link>
-                                        )}
                                         <hr className="my-1" />
                                         <button
                                             onClick={logout}
@@ -150,11 +145,6 @@ const Navbar = () => {
                                     <Link to="/my-orders" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-gray-600 hover:bg-primary-50 rounded-lg">
                                         My Orders
                                     </Link>
-                                    {isAdmin && (
-                                        <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 px-3 py-2 text-accent-500 font-medium hover:bg-accent-50 rounded-lg">
-                                            <FiSettings size={14} /> Admin Panel
-                                        </Link>
-                                    )}
                                     <button onClick={() => { logout(); setMobileOpen(false); }} className="block w-full text-left px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg">
                                         Logout
                                     </button>

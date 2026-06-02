@@ -93,12 +93,6 @@ const Login = () => {
                     <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-500">
                         <p className="font-medium text-gray-700 mb-1">Demo Credentials:</p>
                         <p>User: rahul@gmail.com / rahul123</p>
-                        <p className="mt-1">
-                            Are you an admin?{' '}
-                            <Link to="/admin/login" className="text-accent-600 font-semibold hover:text-accent-700">
-                                Login here
-                            </Link>
-                        </p>
                     </div>
 
                     <button
