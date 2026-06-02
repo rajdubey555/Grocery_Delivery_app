@@ -39,9 +39,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await API.post('/auth/register', formData);
             localStorage.setItem(USER_KEY, JSON.stringify(data));
-            localStorage.removeItem(ADMIN_KEY); // clear any admin session
             setUser(data);
-            setAdminUser(null);
             toast.success('Registration successful!');
             return { success: true };
         } catch (error) {
@@ -51,14 +49,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // User Login (stores in quickcart_user, clears admin session)
+    // User Login (stores in quickcart_user, keeps admin session intact)
     const login = async (email, password) => {
         try {
             const { data } = await API.post('/auth/login', { email, password });
             localStorage.setItem(USER_KEY, JSON.stringify(data));
-            localStorage.removeItem(ADMIN_KEY); // clear any admin session
             setUser(data);
-            setAdminUser(null);
             toast.success('Login successful!');
             return { success: true };
         } catch (error) {
@@ -68,14 +64,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // Admin Login (stores in quickcart_admin, clears user session)
+    // Admin Login (stores in quickcart_admin, keeps user session intact)
     const adminLogin = async (email, password) => {
         try {
             const { data } = await API.post('/auth/login', { email, password });
             localStorage.setItem(ADMIN_KEY, JSON.stringify(data));
-            localStorage.removeItem(USER_KEY); // clear any user session
             setAdminUser(data);
-            setUser(null);
             toast.success('Admin login successful!');
             return { success: true };
         } catch (error) {

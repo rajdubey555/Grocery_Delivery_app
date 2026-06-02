@@ -9,28 +9,28 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const { login, logout } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSubmitting(true);
-        // Check if user is trying to login as admin from user portal
-        const stored = localStorage.getItem('quickcart_user');
-        if (stored) {
-            try {
-                const u = JSON.parse(stored);
-                if (u.role === 'admin') {
-                    setError('Please use the Admin Portal to login as an administrator.');
-                    setSubmitting(false);
-                    return;
-                }
-            } catch { /* ignore */ }
-        }
         const result = await login(email, password);
         setSubmitting(false);
         if (result.success) {
+            // Check if logged-in user is actually an admin
+            const stored = localStorage.getItem('quickcart_user');
+            if (stored) {
+                try {
+                    const u = JSON.parse(stored);
+                    if (u.role === 'admin') {
+                        logout(); // properly clear user state from AuthContext
+                        setError('This portal is for customers only. Please use the Admin Portal.');
+                        return;
+                    }
+                } catch { /* ignore */ }
+            }
             navigate('/');
         }
     };

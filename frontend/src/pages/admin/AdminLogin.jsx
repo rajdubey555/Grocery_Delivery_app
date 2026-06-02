@@ -9,7 +9,7 @@ const AdminLogin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
-    const { adminLogin } = useAuth();
+    const { adminLogin, adminLogout } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -19,7 +19,7 @@ const AdminLogin = () => {
         const result = await adminLogin(email, password);
         setSubmitting(false);
         if (result.success) {
-            // Check if logged-in user is actually an admin
+            // Verify the logged-in user is actually an admin
             const stored = localStorage.getItem('quickcart_admin');
             if (stored) {
                 try {
@@ -28,12 +28,10 @@ const AdminLogin = () => {
                         navigate('/admin');
                         return;
                     }
-                } catch {
-                    // fall through to error
-                }
+                } catch { /* fall through */ }
             }
             // Not an admin — clear and show error
-            localStorage.removeItem('quickcart_admin');
+            adminLogout();
             setError('Access Denied. This portal is for administrators only.');
         }
     };
